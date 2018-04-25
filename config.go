@@ -35,6 +35,7 @@ func (fm folderMapping) validate() error {
 }
 
 func (o Operation) validate() error {
+	// TODO: condense calculations similar to table-driven tests.
 	if o.DestinationRoot == "" {
 		return errors.New("missing `destination_root`")
 	}
