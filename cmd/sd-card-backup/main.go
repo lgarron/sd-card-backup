@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	op, err := backup.ReadFromConfig()
+	op, err := backup.OperationFromConfig()
 	if err != nil {
 		fmt.Printf("Could not read config file: %s\n", err)
 		os.Exit(1)
