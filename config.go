@@ -33,10 +33,13 @@ func operationFromBytes(b []byte) (*Operation, error) {
 	return &config, nil
 }
 
-// OperationFromConfig reads from the global XDG config path.
+func xdgConfigPath() string {
+	return filepath.Join(xdg.ConfigHome, "sd-card-backup", "config.json")
+}
+
+// OperationFromConfig reads from the global config path.
 func OperationFromConfig() (*Operation, error) {
-	configPath := filepath.Join(xdg.ConfigHome, "sd-card-backup", "config.json")
-	file, err := ioutil.ReadFile(configPath)
+	file, err := ioutil.ReadFile(xdgConfigPath())
 	if err != nil {
 		return nil, err
 	}
