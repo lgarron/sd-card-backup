@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 	"syscall"
 	"time"
+
+	"github.com/mostafah/fsync"
 )
 
 type folderOperation struct {
@@ -75,9 +77,9 @@ func (fo folderOperation) visit(path string, f os.FileInfo, err error) error {
 	fmt.Printf("  %s\n", targetPath)
 	fmt.Printf("  %s\n", filepath.Dir(targetPath))
 
-	// os.MkdirAll(filepath.Dir(targetPath), 0700)
+	os.MkdirAll(filepath.Dir(targetPath), 0700)
 
-	// copyFile(targetPath, path, 0644)
+	fsync.Sync(targetPath, path)
 	return nil
 }
 
