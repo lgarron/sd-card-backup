@@ -1,7 +1,6 @@
 package backup
 
 import (
-	"os"
 	"path/filepath"
 	"strings"
 )
@@ -58,6 +57,6 @@ func classifyExt(ext string) int {
 	}
 }
 
-func classifyFile(f os.FileInfo) int {
-	return classifyExt(filepath.Ext(f.Name()))
+func classifyPath(path string) int {
+	return classifyExt(filepath.Ext(path))
 }
