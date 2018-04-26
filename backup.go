@@ -48,8 +48,6 @@ func (fo folderOperation) targetPath(path string, f os.FileInfo) (string, error)
 		return "", err
 	}
 
-	fmt.Println(monthFolderName(path))
-
 	return filepath.Join(
 		fo.Operation.DestinationRoot,
 		classificationFolder,
@@ -58,6 +56,26 @@ func (fo folderOperation) targetPath(path string, f os.FileInfo) (string, error)
 		fo.FolderMapping.Destination,
 		relPath,
 	), nil
+}
+
+func (fo folderOperation) syncFile(dest string, src string) error {
+	fmt.Printf("\r%s      ", dest)
+	if fo.Operation.Options.DryRun {
+		fmt.Println()
+	} else {
+		os.MkdirAll(filepath.Dir(dest), 0700)
+		err := fsync.Sync(dest, src)
+		if err != nil {
+			return err
+		}
+
+		err = fsync.Sync(dest, src)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func (fo folderOperation) visit(path string, f os.FileInfo, err error) error {
@@ -69,18 +87,12 @@ func (fo folderOperation) visit(path string, f os.FileInfo, err error) error {
 		return nil
 	}
 
-	fmt.Printf("[%d] Visited: %s\n", classifyPath(path), path)
 	targetPath, err := fo.targetPath(path, f)
 	if err != nil {
 		return err
 	}
-	fmt.Printf("  %s\n", targetPath)
-	fmt.Printf("  %s\n", filepath.Dir(targetPath))
 
-	os.MkdirAll(filepath.Dir(targetPath), 0700)
-
-	fsync.Sync(targetPath, path)
-	return nil
+	return fo.syncFile(targetPath, path)
 }
 
 // Backups up:

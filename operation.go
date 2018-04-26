@@ -10,6 +10,10 @@ type folderMapping struct {
 	Destination string `json:"destination"`
 }
 
+type CommandLineOptions struct {
+	DryRun bool
+}
+
 // Operation defines the config file format for the `sd-card-backup`
 // commandline tool.
 type Operation struct {
@@ -17,6 +21,7 @@ type Operation struct {
 	SDCardMountPoint string          `json:"sd_card_mount_point"`
 	SDCardNames      []string        `json:"sd_card_names"`
 	FolderMapping    []folderMapping `json:"folder_mapping"`
+	Options          CommandLineOptions
 }
 
 func (fm folderMapping) validate() error {
