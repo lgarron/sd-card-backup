@@ -2,6 +2,12 @@
 
 A simple tool to back up SD cards. Just plug in SD cards for backup and run.
 
+# Installation
+
+Using Go:
+
+    go get -u github.com/lgarron/sd-card-backup/...
+
 # Usage
 
 Place a file at `~/.config/sd-card-backup/config.json` like this:
