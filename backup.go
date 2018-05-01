@@ -114,6 +114,17 @@ func (fo folderOperation) visit(path string, f os.FileInfo, err error) error {
 	return fo.syncFile(targetPath, path)
 }
 
+func folderExists(path string) (bool, error) {
+	stat, err := os.Stat(path)
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	if err != nil {
+		return false, err
+	}
+	return stat.IsDir(), nil
+}
+
 // Backups up:
 //
 //   [op.SDCardMountPoint]/[cardName]/[fm.Source]/[filePath]
@@ -136,9 +147,32 @@ func (op Operation) backupFolder(cardName string, fm folderMapping, ff fileFilte
 
 // BackupCard backups up the given SD card.
 func (op Operation) BackupCard(cardName string) error {
+	sdCardPath := filepath.Join(op.SDCardMountPoint, cardName)
+	// Check if source folder exists is mounted
+	exists, err := folderExists(sdCardPath)
+	if err != nil {
+		return err
+	}
+	if !exists {
+		fmt.Printf("[%s] Skipping SD card (unmounted)\n", cardName)
+		return nil
+	}
+
+	fmt.Printf("[%s] Backing up SD card\n", cardName)
+
 	for _, fc := range classificationBackupOrder {
 		for _, fm := range op.FolderMapping {
-			err := op.backupFolder(cardName, fm, filterClassification(fc))
+
+			// Check if source folder exists
+			exists, err := folderExists(fm.Source)
+			if err != nil {
+				return err
+			}
+			if !exists {
+				continue
+			}
+
+			err = op.backupFolder(cardName, fm, filterClassification(fc))
 			if err != nil {
 				return err
 			}
