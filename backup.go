@@ -10,14 +10,29 @@ import (
 	"github.com/mostafah/fsync"
 )
 
+type fileFilter = func(fileClassification) bool
+
+var classificationBackupOrder = []fileClassification{
+	imageFile,
+	videoFile,
+	unclassifiedFile,
+}
+
+func filterClassification(want fileClassification) fileFilter {
+	return func(have fileClassification) bool {
+		return want == have
+	}
+}
+
 type folderOperation struct {
 	Operation     Operation
 	SourceRoot    string
 	CardName      string
 	FolderMapping folderMapping
+	FileFilter    fileFilter
 }
 
-func folderForClassification(classification int) (string, error) {
+func folderForClassification(classification fileClassification) (string, error) {
 	switch classification {
 	case imageFile:
 		return "Images", nil
@@ -79,6 +94,10 @@ func (fo folderOperation) syncFile(dest string, src string) error {
 }
 
 func (fo folderOperation) visit(path string, f os.FileInfo, err error) error {
+	if !fo.FileFilter(classifyPath(path)) {
+		return nil
+	}
+
 	if err != nil {
 		return err
 	}
@@ -103,23 +122,26 @@ func (fo folderOperation) visit(path string, f os.FileInfo, err error) error {
 //
 //   [op.DestinationRoot]/[classification]/[month]/[cardName]/[fm.Destination]/[filePath]
 //
-func (op Operation) backupFolder(cardName string, fm folderMapping) error {
+func (op Operation) backupFolder(cardName string, fm folderMapping, ff fileFilter) error {
 	folderSourceRoot := filepath.Join(op.SDCardMountPoint, cardName, fm.Source)
 	fo := &folderOperation{
 		Operation:     op,
 		SourceRoot:    folderSourceRoot,
 		CardName:      cardName,
 		FolderMapping: fm,
+		FileFilter:    ff,
 	}
 	return filepath.Walk(folderSourceRoot, fo.visit)
 }
 
 // BackupCard backups up the given SD card.
 func (op Operation) BackupCard(cardName string) error {
-	for _, fm := range op.FolderMapping {
-		err := op.backupFolder(cardName, fm)
-		if err != nil {
-			return err
+	for _, fc := range classificationBackupOrder {
+		for _, fm := range op.FolderMapping {
+			err := op.backupFolder(cardName, fm, filterClassification(fc))
+			if err != nil {
+				return err
+			}
 		}
 	}
 	return nil

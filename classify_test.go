@@ -4,7 +4,7 @@ import "testing"
 
 var classificationCases = []struct {
 	ext                string
-	wantClassification int
+	wantClassification fileClassification
 }{
 	{".jpg", imageFile},
 	{".JpG", imageFile},

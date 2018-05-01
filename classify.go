@@ -5,6 +5,8 @@ import (
 	"strings"
 )
 
+type fileClassification int
+
 const (
 	unclassifiedFile = iota
 	imageFile
@@ -45,7 +47,7 @@ var videoExtensions = map[string]bool{
 
 // classifyExt classifies `ext`, expecting a leading period. `ext` will be
 // normalized to lowercase first.
-func classifyExt(ext string) int {
+func classifyExt(ext string) fileClassification {
 	extLower := strings.ToLower(ext)
 	switch {
 	case imageExtensions[extLower]:
@@ -57,6 +59,6 @@ func classifyExt(ext string) int {
 	}
 }
 
-func classifyPath(path string) int {
+func classifyPath(path string) fileClassification {
 	return classifyExt(filepath.Ext(path))
 }
