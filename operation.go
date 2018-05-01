@@ -10,7 +10,7 @@ type folderMapping struct {
 	Destination string `json:"destination"`
 }
 
-type CommandLineOptions struct {
+type commandLineOptions struct {
 	DryRun bool
 }
 
@@ -21,7 +21,7 @@ type Operation struct {
 	SDCardMountPoint string          `json:"sd_card_mount_point"`
 	SDCardNames      []string        `json:"sd_card_names"`
 	FolderMapping    []folderMapping `json:"folder_mapping"`
-	Options          CommandLineOptions
+	Options          commandLineOptions
 }
 
 func (fm folderMapping) validate() error {
