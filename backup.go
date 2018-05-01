@@ -183,7 +183,10 @@ func (op Operation) BackupCard(cardName string) error {
 
 // BackupAllCards backs up all cards in `op.SDCardNames`.
 func (op Operation) BackupAllCards() error {
-	fmt.Printf("Backing up to: %s\n", op.DestinationRoot)
+	fmt.Printf("--------\n")
+	fmt.Printf("Backing up from:\n  %s\n", op.SDCardMountPoint)
+	fmt.Printf("Backing up to:\n  %s\n", op.DestinationRoot)
+	fmt.Printf("--------\n")
 	for _, s := range op.SDCardNames {
 		err := op.BackupCard(s)
 		if err != nil {
