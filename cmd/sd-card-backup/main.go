@@ -19,12 +19,9 @@ func main() {
 
 	op.Options.DryRun = *dryRun
 
-	fmt.Printf("Backing up to: %s\n", op.DestinationRoot)
-	for _, s := range op.SDCardNames {
-		err := op.BackupCard(s)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error backing up: %s\n", err)
-			os.Exit(1)
-		}
+	err = op.BackupAllCards()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error backing up: %s\n", err)
+		os.Exit(1)
 	}
 }
