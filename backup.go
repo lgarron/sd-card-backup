@@ -150,11 +150,11 @@ func (op Operation) BackupCard(cardName string) error {
 		return err
 	}
 	if !exists {
-		fmt.Printf("[%s] Skipping SD card (unmounted)\n", cardName)
+		fmt.Printf("\r[%s] Skipping SD card (unmounted)\n", cardName)
 		return nil
 	}
 
-	fmt.Printf("[%s] Backing up SD card\n", cardName)
+	fmt.Printf("\r[%s] Backing up SD card\n", cardName)
 
 	for _, fc := range classificationBackupOrder {
 		for _, fm := range op.FolderMapping {
