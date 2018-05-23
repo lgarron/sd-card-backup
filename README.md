@@ -25,17 +25,17 @@ Place a file at `~/.config/sd-card-backup/config.json` like this:
       ]
     }
 
-`sd-card-backup` will iterate through any listed SD cards that are mounted and back up files sorted by `file type/month/SD card` as follows:
+`sd-card-backup` will iterate through any listed SD cards that are mounted and back up files sorted by `file-type/year/date/sd-card` as follows:
 
 
 |Source|`/Volumes/KUBO/DCIM/103CANON/IMG_8868.CR2`|
 |----|----|
-|Destination|`/backup/path/Images/2018-04/KUBO/DCIM/103CANON/IMG_8868.CR2`|
+|Destination|`/backup/path/Images/2018/2018-04-21/KUBO/DCIM/103CANON/IMG_8868.CR2`|
 
 |Source|`/Volumes/NIXIE/DCIM/101MSDCF/DSC07203.JPG`|
 |----|----|
-|Destination|`/backup/path/Images/2018-01/NIXIE/DCIM/101MSDCF/DSC07203.JPG`|
+|Destination|`/backup/path/Images/2018/2018-01-31/NIXIE/DCIM/101MSDCF/DSC07203.JPG`|
 
 |Source|`/Volumes/NIXIE/PRIVATE/M4ROOT/CLIP/C0026.MP4`|
 |----|----|
-|Destination|`/backup/path/Videos/2018-02/NIXIE/CLIP/C0026.MP4`|
+|Destination|`/backup/path/Videos/2018/2018-02-09/NIXIE/CLIP/C0026.MP4`|

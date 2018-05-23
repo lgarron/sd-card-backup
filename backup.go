@@ -126,7 +126,7 @@ func folderExists(path string) (bool, error) {
 //
 // to:
 //
-//   [op.DestinationRoot]/[classification]/[month]/[cardName]/[fm.Destination]/[filePath]
+//   [op.DestinationRoot]/[classification]/[year]/[year-month-day]/[cardName]/[fm.Destination]/[filePath]
 //
 func (op Operation) backupFolder(cardName string, fm folderMapping, ff fileFilter) error {
 	folderSourceRoot := filepath.Join(op.SDCardMountPoint, cardName, fm.Source)
