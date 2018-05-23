@@ -7,7 +7,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/mostafah/fsync"
+	"github.com/lgarron/sd-card-backup/sync"
 )
 
 type fileFilter = func(fileClassification) bool
@@ -30,6 +30,7 @@ type folderOperation struct {
 	CardName      string
 	FolderMapping folderMapping
 	FileFilter    fileFilter
+	Syncer        sync.Syncer
 }
 
 func folderForClassification(classification fileClassification) (string, error) {
@@ -73,21 +74,12 @@ func (fo folderOperation) targetPath(path string, f os.FileInfo) (string, error)
 	), nil
 }
 
-func (fo folderOperation) syncFile(dest string, src string) error {
+func (fo folderOperation) syncFile(src string, dest string) error {
 	fmt.Printf("\r%s      ", dest)
 	if fo.Operation.Options.DryRun {
 		fmt.Println()
 	} else {
-		os.MkdirAll(filepath.Dir(dest), 0700)
-		err := fsync.Sync(dest, src)
-		if err != nil {
-			return err
-		}
-
-		err = fsync.Sync(dest, src)
-		if err != nil {
-			return err
-		}
+		return fo.Syncer.Queue(src, dest)
 	}
 
 	return nil
@@ -111,7 +103,7 @@ func (fo folderOperation) visit(path string, f os.FileInfo, err error) error {
 		return err
 	}
 
-	return fo.syncFile(targetPath, path)
+	return fo.syncFile(path, targetPath)
 }
 
 func folderExists(path string) (bool, error) {
@@ -141,6 +133,7 @@ func (op Operation) backupFolder(cardName string, fm folderMapping, ff fileFilte
 		CardName:      cardName,
 		FolderMapping: fm,
 		FileFilter:    ff,
+		Syncer:        &sync.GoSyncer{},
 	}
 	return filepath.Walk(folderSourceRoot, fo.visit)
 }
@@ -163,8 +156,10 @@ func (op Operation) BackupCard(cardName string) error {
 	for _, fc := range classificationBackupOrder {
 		for _, fm := range op.FolderMapping {
 
+			folderSourceRoot := filepath.Join(op.SDCardMountPoint, cardName, fm.Source)
+
 			// Check if source folder exists
-			exists, err := folderExists(fm.Source)
+			exists, err := folderExists(folderSourceRoot)
 			if err != nil {
 				return err
 			}
@@ -183,6 +178,24 @@ func (op Operation) BackupCard(cardName string) error {
 
 // BackupAllCards backs up all cards in `op.SDCardNames`.
 func (op Operation) BackupAllCards() error {
+	// Check if source folder exists
+	exists, err := folderExists(op.SDCardMountPoint)
+	if err != nil {
+		return err
+	}
+	if !exists {
+		return fmt.Errorf("SD card mount point does not exist: %s", op.DestinationRoot)
+	}
+
+	// Check if destination folder exists
+	exists, err = folderExists(op.DestinationRoot)
+	if err != nil {
+		return err
+	}
+	if !exists {
+		return fmt.Errorf("destination folder does not exist: %s", op.DestinationRoot)
+	}
+
 	fmt.Printf("--------\n")
 	fmt.Printf("Backing up from:\n  %s\n", op.SDCardMountPoint)
 	fmt.Printf("Backing up to:\n  %s\n", op.DestinationRoot)
