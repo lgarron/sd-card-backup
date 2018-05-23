@@ -136,7 +136,7 @@ func (op Operation) backupFolder(cardName string, fm folderMapping, ff fileFilte
 		CardName:      cardName,
 		FolderMapping: fm,
 		FileFilter:    ff,
-		Syncer:        &sync.GoSyncer{},
+		Syncer:        &sync.ImmediateRsync{},
 	}
 	return filepath.Walk(folderSourceRoot, fo.visit)
 }
