@@ -46,11 +46,11 @@ func folderForClassification(classification fileClassification) (string, error) 
 	}
 }
 
-func monthFolderName(path string) string {
+func dateFolderNames(path string) (year string, date string) {
 	stat := syscall.Stat_t{}
 	syscall.Stat(path, &stat)
 	ctime := time.Unix(int64(stat.Ctimespec.Sec), int64(stat.Ctimespec.Nsec))
-	return ctime.Format("2006-01")
+	return ctime.Format("2006"), ctime.Format("2006-01-02")
 }
 
 func (fo folderOperation) targetPath(path string, f os.FileInfo) (string, error) {
@@ -64,10 +64,13 @@ func (fo folderOperation) targetPath(path string, f os.FileInfo) (string, error)
 		return "", err
 	}
 
+	year, date := dateFolderNames(path)
+
 	return filepath.Join(
 		fo.Operation.DestinationRoot,
 		classificationFolder,
-		monthFolderName(path),
+		year,
+		date,
 		fo.CardName,
 		fo.FolderMapping.Destination,
 		relPath,
