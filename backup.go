@@ -7,6 +7,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/lgarron/sd-card-backup/printer"
 	"github.com/lgarron/sd-card-backup/sync"
 )
 
@@ -78,7 +79,7 @@ func (fo folderOperation) targetPath(path string, f os.FileInfo) (string, error)
 }
 
 func (fo folderOperation) syncFile(src string, dest string) error {
-	fmt.Printf("\r%s      ", dest)
+	printer.Printf("%s", dest)
 	if fo.Operation.Options.DryRun {
 		fmt.Println()
 	} else {
@@ -138,7 +139,11 @@ func (op Operation) backupFolder(cardName string, fm folderMapping, ff fileFilte
 		FileFilter:    ff,
 		Syncer:        &sync.ImmediateRsync{},
 	}
-	return filepath.Walk(folderSourceRoot, fo.visit)
+	err := filepath.Walk(folderSourceRoot, fo.visit)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // BackupCard backups up the given SD card.
@@ -150,11 +155,11 @@ func (op Operation) BackupCard(cardName string) error {
 		return err
 	}
 	if !exists {
-		fmt.Printf("\r[%s] Skipping SD card (unmounted)\n", cardName)
+		// printer.Printf("[%s] Skipping SD card (unmounted)\n", cardName)
 		return nil
 	}
 
-	fmt.Printf("\r[%s] Backing up SD card\n", cardName)
+	fmt.Printf("\n[%s] Backing up SD card\n", cardName)
 
 	for _, fc := range classificationBackupOrder {
 		for _, fm := range op.FolderMapping {
@@ -209,5 +214,6 @@ func (op Operation) BackupAllCards() error {
 			return err
 		}
 	}
+	fmt.Printf("\n")
 	return nil
 }
