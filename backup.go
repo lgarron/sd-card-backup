@@ -7,7 +7,6 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/lgarron/sd-card-backup/printer"
 	"github.com/lgarron/sd-card-backup/sync"
 )
 
@@ -79,7 +78,7 @@ func (fo folderOperation) targetPath(path string, f os.FileInfo) (string, error)
 }
 
 func (fo folderOperation) syncFile(src string, dest string) error {
-	printer.Printf("%s", dest)
+	fmt.Printf("%s\n", src)
 	if fo.Operation.Options.DryRun {
 		fmt.Println()
 	} else {
@@ -159,7 +158,7 @@ func (op Operation) BackupCard(cardName string) error {
 		return nil
 	}
 
-	fmt.Printf("\n[%s] Backing up SD card\n", cardName)
+	fmt.Printf("[%s] Backing up SD card\n", cardName)
 
 	for _, fc := range classificationBackupOrder {
 		for _, fm := range op.FolderMapping {
