@@ -11,6 +11,7 @@ const (
 	unclassifiedFile = iota
 	imageFile
 	videoFile
+	audioFile
 )
 
 // TODO: This is currently conservative. A more robust approach using file(1) or
@@ -45,6 +46,20 @@ var videoExtensions = map[string]bool{
 	".mts":   true,
 }
 
+// TODO: This is currently conservative. A more robust approach using file(1) or
+// `http.DetectContentType` would be nice, although both are hacky.
+var audioExtensions = map[string]bool{
+	".aac":  true,
+	".aif":  true,
+	".aiff": true,
+	".flac": true,
+	".m4a":  true,
+	".mp3":  true,
+	".ogg":  true,
+	".wav":  true,
+	".wma":  true,
+}
+
 // classifyExt classifies `ext`, expecting a leading period. `ext` will be
 // normalized to lowercase first.
 func classifyExt(ext string) fileClassification {
@@ -54,6 +69,8 @@ func classifyExt(ext string) fileClassification {
 		return imageFile
 	case videoExtensions[extLower]:
 		return videoFile
+	case audioExtensions[extLower]:
+		return audioFile
 	default:
 		return unclassifiedFile
 	}
