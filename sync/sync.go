@@ -29,9 +29,10 @@ func (s GoSyncer) Queue(src string, dest string) error {
 	return fsync.Sync(dest, src)
 }
 
-func (r GoSyncer) Flush() error {
-	return nil
-}
+// // Flush is a no-op for GoSyncer.
+// func (s GoSyncer) Flush() error {
+// 	return nil
+// }
 
 // ImmediateRsync shells out queued files to rsync.
 type ImmediateRsync struct{}
