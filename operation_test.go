@@ -25,8 +25,8 @@ func TestOperationFromBytesGood(t *testing.T) {
 		SDCardMountPoint: "/Volumes",
 		SDCardNames:      []string{"HERA", "ZEUS"},
 		FolderMapping: []folderMapping{
-			folderMapping{Source: "DCIM", Destination: "DCIM"},
-			folderMapping{Source: "MP_ROOT", Destination: "MP_ROOT"},
+			{Source: "DCIM", Destination: "DCIM"},
+			{Source: "MP_ROOT", Destination: "MP_ROOT"},
 		},
 	}
 
