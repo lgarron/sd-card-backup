@@ -1,4 +1,4 @@
-// Package fsync keeps two files or directories in sync.
+// package fsync keeps two files or directories in sync.
 //
 //         err := fsync.Sync("~/dst", ".")
 //
@@ -36,7 +36,6 @@ import (
 )
 
 var (
-	// ErrFileOverDir warns about overwriting a dir with a file.
 	ErrFileOverDir = errors.New(
 		"fsync: trying to overwrite a non-empty directory with a file")
 )
@@ -51,7 +50,7 @@ func SyncTo(to string, srcs ...string) error {
 	return NewSyncer().SyncTo(to, srcs...)
 }
 
-// Syncer provides functions for syncing files.
+// Type Syncer provides functions for syncing files.
 type Syncer struct {
 	// Set this to true to delete files in the destination that don't exist
 	// in the source.
