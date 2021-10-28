@@ -52,7 +52,7 @@ func folderForClassification(classification fileClassification) (string, error) 
 func dateFolderNames(path string) (year string, date string) {
 	stat := syscall.Stat_t{}
 	syscall.Stat(path, &stat)
-	ctime := time.Unix(int64(stat.Ctimespec.Sec), int64(stat.Ctimespec.Nsec))
+	ctime := time.Unix(int64(stat.Ctim.Sec), int64(stat.Ctimespec.Nsec))
 	return ctime.Format("2006"), ctime.Format("2006-01-02")
 }
 

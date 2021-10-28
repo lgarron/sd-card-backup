@@ -1,6 +1,6 @@
 module github.com/lgarron/sd-card-backup
 
-go 1.15
+go 1.17
 
 require (
 	github.com/adrg/xdg v0.3.1
