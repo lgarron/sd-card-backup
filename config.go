@@ -2,10 +2,10 @@ package backup
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
+	"os"
 	"path/filepath"
-
-	"github.com/adrg/xdg"
 )
 
 func operationFromBytes(b []byte) (*Operation, error) {
@@ -25,7 +25,11 @@ func operationFromBytes(b []byte) (*Operation, error) {
 }
 
 func xdgConfigPath() string {
-	return filepath.Join(xdg.ConfigHome, "sd-card-backup", "config.json")
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "%s\n", err)
+	}
+	return filepath.Join(homeDir, ".config", "sd-card-backup", "config.json")
 }
 
 // OperationFromConfig reads from the global config path.
