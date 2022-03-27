@@ -22,6 +22,7 @@ var imageExtensions = map[string]bool{
 	".arw":  true,
 	".bmp":  true,
 	".cr2":  true,
+	".cr3":  true,
 	".dng":  true,
 	".gif":  true,
 	".jpeg": true,
