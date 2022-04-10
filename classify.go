@@ -45,6 +45,7 @@ var videoExtensions = map[string]bool{
 	".mpeg:": true,
 	".mpg:":  true,
 	".mts":   true,
+	".mxf":   true,
 }
 
 // TODO: This is currently conservative. A more robust approach using file(1) or
