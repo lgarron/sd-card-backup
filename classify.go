@@ -46,6 +46,7 @@ var videoExtensions = map[string]bool{
 	".mpg:":  true,
 	".mts":   true,
 	".mxf":   true,
+	".crm":   true, // Canon raw movie
 }
 
 // TODO: This is currently conservative. A more robust approach using file(1) or
