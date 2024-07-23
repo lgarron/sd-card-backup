@@ -52,8 +52,8 @@ func folderForClassification(classification fileClassification) (string, error) 
 func dateFolderNames(path string) (year string, date string) {
 	stat := syscall.Stat_t{}
 	syscall.Stat(path, &stat)
-	ctime := time.Unix(int64(stat.Ctimespec.Sec), int64(stat.Ctimespec.Nsec))
-	return ctime.Format("2006"), ctime.Format("2006-01-02")
+	birthTime := time.Unix(int64(stat.Birthtimespec.Sec), int64(stat.Birthtimespec.Nsec))
+	return birthTime.Format("2006"), birthTime.Format("2006-01-02")
 }
 
 func (fo folderOperation) targetPath(path string, f os.FileInfo) (string, error) {
@@ -125,12 +125,11 @@ func folderExists(path string) (bool, error) {
 
 // Backups up:
 //
-//   [op.SDCardMountPoint]/[cardName]/[fm.Source]/[filePath]
+//	[op.SDCardMountPoint]/[cardName]/[fm.Source]/[filePath]
 //
 // to:
 //
-//   [op.DestinationRoot]/[classification]/[year]/[year-month-day]/[cardName]/[fm.Destination]/[filePath]
-//
+//	[op.DestinationRoot]/[classification]/[year]/[year-month-day]/[cardName]/[fm.Destination]/[filePath]
 func (op Operation) backupFolder(cardName string, fm folderMapping, ff fileFilter) error {
 	folderSourceRoot := filepath.Join(op.SDCardMountPoint, cardName, fm.Source)
 	fo := &folderOperation{
