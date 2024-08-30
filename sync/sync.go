@@ -14,6 +14,8 @@ import (
 	"github.com/mostafah/fsync"
 )
 
+const BYTES_IN_MEGABYTE = 1000 * 1000
+
 // Syncer represents a way to sync a list of files.
 type Syncer interface {
 	Queue(src string, dest string) error
@@ -70,8 +72,11 @@ func (s MacOSNativeCpUsingFilesizeAndBirthTime) Queue(src string, dest string) e
 	}
 
 	if same {
+		fmt.Printf(" (skipping: already backed up)")
 		return nil
 	}
+
+	fmt.Printf("\n↪ %s (%d MB)", dest, srcStat.Size/BYTES_IN_MEGABYTE)
 
 	os.MkdirAll(filepath.Dir(dest), 0700)
 
@@ -79,7 +84,24 @@ func (s MacOSNativeCpUsingFilesizeAndBirthTime) Queue(src string, dest string) e
 		// TODO: output progress using https://unix.stackexchange.com/questions/66795/how-to-check-progress-of-running-cp#:~:text=On%20recent%20versions%20of%20Mac,written%20to%20the%20standard%20output.%22
 
 		// `-p` copies modification and access time, but not creation (birth) time.
-		cmd := exec.Command("cp", "-p", src, dest)
+		cmd := exec.Command("cp", src, dest)
+		cmd.Stderr = os.Stderr
+		err = cmd.Run()
+		if err != nil {
+			// TODO: more info about the file we failed on?
+			cmd := exec.Command("open", "-R", dest)
+			cmd.Stderr = os.Stderr
+			err = cmd.Run()
+
+			return err
+		}
+	}
+
+	{
+		// TODO: output progress using https://unix.stackexchange.com/questions/66795/how-to-check-progress-of-running-cp#:~:text=On%20recent%20versions%20of%20Mac,written%20to%20the%20standard%20output.%22
+
+		// `-p` copies modification and access time, but not creation (birth) time.
+		cmd := exec.Command("touch", "-r", src, dest)
 		cmd.Stderr = os.Stderr
 		err = cmd.Run()
 		if err != nil {
@@ -104,8 +126,10 @@ func (s MacOSNativeCpUsingFilesizeAndBirthTime) Queue(src string, dest string) e
 			return fmt.Errorf("incompatible times: (%v, %v)", birthTimeStringFromMacOS, formattedTimeFromStat)
 		}
 
-		if false {
-			cmd2 := exec.Command("SetFileInfo", "-d", string(birthTimeStringFromMacOS), dest)
+		fmt.Println("copybing birththa: %s,%s", birthTimeStringFromMacOS, formattedTimeFromStat)
+
+		{
+			cmd2 := exec.Command("SetFile", "-d", string(birthTimeStringFromMacOS), dest)
 			cmd2.Stderr = os.Stderr
 			err = cmd2.Run()
 			if err != nil {

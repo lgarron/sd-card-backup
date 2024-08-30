@@ -81,7 +81,7 @@ func (fo folderOperation) targetPath(path string, f os.FileInfo) (string, error)
 }
 
 func (fo folderOperation) syncFile(src string, dest string) error {
-	fmt.Printf("%s\n", src)
+	fmt.Printf("\n%s", src)
 	if fo.Operation.Options.DryRun {
 		fmt.Println()
 	} else {
