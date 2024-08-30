@@ -123,10 +123,9 @@ func (s MacOSNativeCpUsingFilesizeAndBirthTime) Queue(src string, dest string) e
 		formattedTimeFromStat := time.Unix(srcStat.Birthtimespec.Sec, srcStat.Birthtimespec.Nsec).Format("01/02/2006 15:04:05")
 
 		if birthTimeStringFromMacOS != formattedTimeFromStat {
+			// TODO: remove the `birthTimeStringFromMacOS` calculation once these have been stress tested across time zones.
 			return fmt.Errorf("incompatible times: (%v, %v)", birthTimeStringFromMacOS, formattedTimeFromStat)
 		}
-
-		fmt.Println("copybing birththa: %s,%s", birthTimeStringFromMacOS, formattedTimeFromStat)
 
 		{
 			cmd2 := exec.Command("SetFile", "-d", string(birthTimeStringFromMacOS), dest)
