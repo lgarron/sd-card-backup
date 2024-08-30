@@ -182,6 +182,8 @@ func (op Operation) BackupCard(cardName string) error {
 			}
 		}
 	}
+
+	fmt.Println("")
 	return nil
 }
 
@@ -215,6 +217,5 @@ func (op Operation) BackupAllCards() error {
 			return err
 		}
 	}
-	fmt.Printf("\n")
 	return nil
 }
