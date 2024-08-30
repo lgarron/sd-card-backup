@@ -81,12 +81,16 @@ func (fo folderOperation) targetPath(path string, f os.FileInfo) (string, error)
 }
 
 func (fo folderOperation) syncFile(src string, dest string) error {
-	fmt.Printf("\n%s", src)
+	fmt.Printf("%s", src)
 	if fo.Operation.Options.DryRun {
 		fmt.Println()
 	} else {
-		return fo.Syncer.Queue(src, dest)
+		err := fo.Syncer.Queue(src, dest)
+		if err != nil {
+			return err
+		}
 	}
+	fmt.Println("")
 
 	return nil
 }
@@ -160,7 +164,7 @@ func (op Operation) BackupCard(cardName string) error {
 		return nil
 	}
 
-	fmt.Printf("[%s] Backing up SD card\n", cardName)
+	fmt.Printf("[%s] Backing up SD card", cardName)
 
 	for _, fc := range classificationBackupOrder {
 		for _, fm := range op.FolderMapping {

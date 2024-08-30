@@ -162,10 +162,12 @@ func (s MacOSNativeCpUsingFilesizeAndBirthTime) fileIsSameHeuristic(src string, 
 	}
 
 	if srcStat.Size != destStat.Size {
+		fmt.Printf("\n↪️ file size differs: %d src bytes vs. %d dest bytes", srcStat.Size, destStat.Size)
 		return false, &srcStat, nil
 	}
 
 	if srcStat.Birthtimespec.Sec != destStat.Birthtimespec.Sec {
+		fmt.Printf("\n↪️ birth time differs: %d src vs. %d dest", srcStat.Birthtimespec.Sec, destStat.Birthtimespec.Sec)
 		return false, &srcStat, nil
 	}
 
