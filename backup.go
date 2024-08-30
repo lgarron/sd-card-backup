@@ -138,7 +138,7 @@ func (op Operation) backupFolder(cardName string, fm folderMapping, ff fileFilte
 		CardName:      cardName,
 		FolderMapping: fm,
 		FileFilter:    ff,
-		Syncer:        &sync.ImmediateRsync{},
+		Syncer:        sync.NewMacOSNativeCpUsingFilesizeAndBirthTime(),
 	}
 	err := filepath.Walk(folderSourceRoot, fo.visit)
 	if err != nil {
