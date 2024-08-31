@@ -1,6 +1,6 @@
 # `sd-card-backup`
 
-A simple tool to back up SD cards (or anything used to store media similar to an SD card). Just plug in and run `sd-card-backup` to back up everything.
+A simple tool to back up SD cards (or anything used to store media similar to an SD card, e.g. CFExpress B). Just plug in and run `sd-card-backup` to back up everything.
 
 # Installation
 
@@ -25,7 +25,7 @@ Place a file at `~/.config/sd-card-backup/config.json` like this:
       ]
     }
 
-`sd-card-backup` will iterate through any listed SD cards that are mounted and back up files sorted by `file-type/year/date/sd-card` as follows:
+`sd-card-backup` will iterate through any listed cards that are mounted and back up files sorted by `file-type/year/date/sd-card` as follows:
 
 | Source      | `/Volumes/KUBO/DCIM/103CANON/IMG_8868.CR2`                            |
 | ----------- | --------------------------------------------------------------------- |

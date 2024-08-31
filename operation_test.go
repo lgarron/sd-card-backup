@@ -84,7 +84,7 @@ var validationErrors = []struct {
   "sd_card_names": ["HERA", ""],
   "folder_mapping": [{"source": "from", "destination": "to"}]
 }`,
-		"contains empty SD card name"},
+		"contains empty card name"},
 	{`{
   "destination_root": "/test",
   "sd_card_mount_point": "/Volumes",

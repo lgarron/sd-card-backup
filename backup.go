@@ -151,7 +151,7 @@ func (op Operation) backupFolder(cardName string, fm folderMapping, ff fileFilte
 	return nil
 }
 
-// BackupCard backups up the given SD card.
+// BackupCard backups up the given card.
 func (op Operation) BackupCard(cardName string) error {
 	sdCardPath := filepath.Join(op.SDCardMountPoint, cardName)
 	// Check if source folder exists is mounted
@@ -160,11 +160,11 @@ func (op Operation) BackupCard(cardName string) error {
 		return err
 	}
 	if !exists {
-		// printer.Printf("[%s] Skipping SD card (unmounted)\n", cardName)
+		// printer.Printf("[%s] Skipping card (unmounted)\n", cardName)
 		return nil
 	}
 
-	fmt.Printf("[%s] Backing up SD card", cardName)
+	fmt.Printf("[%s] Backing up card\n", cardName)
 
 	for _, fc := range classificationBackupOrder {
 		for _, fm := range op.FolderMapping {
@@ -199,7 +199,7 @@ func (op Operation) BackupAllCards() error {
 		return err
 	}
 	if !exists {
-		return fmt.Errorf("SD card mount point does not exist: %s", op.DestinationRoot)
+		return fmt.Errorf("Card mount point does not exist: %s", op.DestinationRoot)
 	}
 
 	// Check if destination folder exists

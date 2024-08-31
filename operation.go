@@ -50,7 +50,7 @@ func (o Operation) validate() error {
 	}
 	for _, c := range o.SDCardNames {
 		if c == "" {
-			return errors.New("contains empty SD card name")
+			return errors.New("contains empty card name")
 		}
 	}
 	if o.FolderMapping == nil {
