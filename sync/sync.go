@@ -89,10 +89,6 @@ func (s MacOSNativeCpUsingFilesizeAndBirthTime) Queue(src string, dest string) e
 		err = cmd.Run()
 		if err != nil {
 			// TODO: more info about the file we failed on?
-			cmd := exec.Command("open", "-R", dest)
-			cmd.Stderr = os.Stderr
-			err = cmd.Run()
-
 			return err
 		}
 	}
