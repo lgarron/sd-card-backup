@@ -14,6 +14,7 @@ import (
 	"github.com/mostafah/fsync"
 )
 
+const SECONDS_IN_AN_HOUR = 60 * 60
 const BYTES_IN_MEGABYTE = 1000 * 1000
 
 // Syncer represents a way to sync a list of files.
@@ -163,8 +164,13 @@ func (s MacOSNativeCpUsingFilesizeAndBirthTime) fileIsSameHeuristic(src string, 
 	}
 
 	if srcStat.Birthtimespec.Sec != destStat.Birthtimespec.Sec {
-		fmt.Printf("\n↪️ birth time differs: %d src vs. %d dest", srcStat.Birthtimespec.Sec, destStat.Birthtimespec.Sec)
-		return false, &srcStat, nil
+		if srcStat.Birthtimespec.Sec+SECONDS_IN_AN_HOUR == destStat.Birthtimespec.Sec || srcStat.Birthtimespec.Sec == destStat.Birthtimespec.Sec+SECONDS_IN_AN_HOUR {
+			// https://github.com/lgarron/sd-card-backup/issues/3
+			fmt.Printf("\n↪️ birth time differs by exactly one hour, assuming this is due to Daylight Savings and treating as the same: %d src vs. %d dest", srcStat.Birthtimespec.Sec, destStat.Birthtimespec.Sec)
+		} else {
+			fmt.Printf("\n↪️ birth time differs: %d src vs. %d dest", srcStat.Birthtimespec.Sec, destStat.Birthtimespec.Sec)
+			return false, &srcStat, nil
+		}
 	}
 
 	return true, &srcStat, nil
