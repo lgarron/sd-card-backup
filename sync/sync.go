@@ -137,6 +137,8 @@ func (s MacOSNativeCpUsingFilesizeAndBirthTime) Queue(src string, dest string) e
 	return nil
 }
 
+var daylightSavingsMessageShown = false
+
 // Returns src stat if there was no error.
 func (s MacOSNativeCpUsingFilesizeAndBirthTime) fileIsSameHeuristic(src string, dest string) (bool, *syscall.Stat_t, error) {
 	if filepath.Base(src) != filepath.Base((dest)) {
@@ -166,7 +168,12 @@ func (s MacOSNativeCpUsingFilesizeAndBirthTime) fileIsSameHeuristic(src string, 
 	if srcStat.Birthtimespec.Sec != destStat.Birthtimespec.Sec {
 		if srcStat.Birthtimespec.Sec+SECONDS_IN_AN_HOUR == destStat.Birthtimespec.Sec || srcStat.Birthtimespec.Sec == destStat.Birthtimespec.Sec+SECONDS_IN_AN_HOUR {
 			// https://github.com/lgarron/sd-card-backup/issues/3
-			fmt.Printf("\n↪️ birth time differs by exactly one hour, assuming this is due to Daylight Savings and treating as the same: %d src vs. %d dest", srcStat.Birthtimespec.Sec, destStat.Birthtimespec.Sec)
+			fmt.Printf(" 🕐")
+			if !(daylightSavingsMessageShown) {
+				fmt.Printf("\n↪️ birth time differs by exactly one hour, assuming this is due to Daylight Savings and treating as the same: %d src vs. %d dest", srcStat.Birthtimespec.Sec, destStat.Birthtimespec.Sec)
+				fmt.Printf("\n  ↪️ (This message will not be shown again during this run, and only a `🕐` icon will be shown after the corresponding file instead.)")
+				daylightSavingsMessageShown = true
+			}
 		} else {
 			fmt.Printf("\n↪️ birth time differs: %d src vs. %d dest", srcStat.Birthtimespec.Sec, destStat.Birthtimespec.Sec)
 			return false, &srcStat, nil
