@@ -66,6 +66,8 @@ func NewMacOSNativeCpUsingFilesizeAndBirthTime() MacOSNativeCpUsingFilesizeAndBi
 	return MacOSNativeCpUsingFilesizeAndBirthTime{}
 }
 
+var alreadyBackedUpMessageShown = false
+
 func (s MacOSNativeCpUsingFilesizeAndBirthTime) Queue(src string, dest string) error {
 	same, srcStat, err := s.fileIsSameHeuristic(src, dest)
 	if err != nil {
@@ -73,7 +75,12 @@ func (s MacOSNativeCpUsingFilesizeAndBirthTime) Queue(src string, dest string) e
 	}
 
 	if same {
-		fmt.Printf(" (skipping: already backed up)")
+		fmt.Print(" ⏩")
+		if !(alreadyBackedUpMessageShown) {
+			fmt.Printf("\n↪️ Skipping because the file appears to be backed up")
+			fmt.Printf("\n  ↪️ (This message will not be shown again during this run, and only a `⏩` icon will be shown after the corresponding file instead.)")
+			alreadyBackedUpMessageShown = true
+		}
 		return nil
 	}
 
