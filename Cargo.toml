@@ -2,7 +2,7 @@
 name = "sd-card-backup"
 description = "A simple tool to backup up SD cards. (Or CFast, CFExpress, etc.)"
 license = "MIT"
-version = "0.3.0-draft1"
+version = "0.3.0-draft2"
 edition = "2021"
 
 [dependencies]
