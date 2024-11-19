@@ -1,6 +1,8 @@
 [package]
 name = "sd-card-backup"
-version = "0.1.0"
+description = "A simple tool to backup up SD cards. (Or CFast, CFExpress, etc.)"
+license = "MIT"
+version = "0.3.0-draft1"
 edition = "2021"
 
 [dependencies]
