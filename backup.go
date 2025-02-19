@@ -15,6 +15,7 @@ type fileFilter = func(fileClassification) bool
 var classificationBackupOrder = []fileClassification{
 	imageFile,
 	videoFile,
+	rawVideoFile,
 	audioFile,
 	unclassifiedFile,
 }
@@ -40,6 +41,8 @@ func folderForClassification(classification fileClassification) (string, error) 
 		return "Images", nil
 	case videoFile:
 		return "Videos", nil
+	case rawVideoFile:
+		return "RAW Video", nil
 	case audioFile:
 		return "Audio", nil
 	case unclassifiedFile:

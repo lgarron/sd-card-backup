@@ -11,6 +11,7 @@ const (
 	unclassifiedFile = iota
 	imageFile
 	videoFile
+	rawVideoFile
 	audioFile
 )
 
@@ -46,7 +47,12 @@ var videoExtensions = map[string]bool{
 	".mpg:":  true,
 	".mts":   true,
 	".mxf":   true,
-	".crm":   true, // Canon raw movie
+}
+
+// TODO: This is currently conservative. A more robust approach using file(1) or
+// `http.DetectContentType` would be nice, although both are hacky.
+var rawVideoExtensions = map[string]bool{
+	".crm": true, // Canon raw movie
 }
 
 // TODO: This is currently conservative. A more robust approach using file(1) or
@@ -72,6 +78,8 @@ func classifyExt(ext string) fileClassification {
 		return imageFile
 	case videoExtensions[extLower]:
 		return videoFile
+	case rawVideoExtensions[extLower]:
+		return rawVideoFile
 	case audioExtensions[extLower]:
 		return audioFile
 	default:

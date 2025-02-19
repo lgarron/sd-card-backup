@@ -9,6 +9,7 @@ var classificationCases = []struct {
 	{".jpg", imageFile},
 	{".JpG", imageFile},
 	{".mp4", videoFile},
+	{".CRM", rawVideoFile},
 	{".wav", audioFile},
 	{".txt", unclassifiedFile},
 	{"", unclassifiedFile},
