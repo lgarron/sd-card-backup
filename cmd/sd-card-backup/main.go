@@ -26,7 +26,7 @@ func main() {
 
 	if len(op.CommandToRunBefore) > 0 {
 		if op.Options.DryRun {
-			fmt.Printf("Skipping command due to dry run: %#v\n", op.CommandToRunBefore)
+			fmt.Printf("Skipping the following `command_to_run_before` due to dry run: %#v\n", op.CommandToRunBefore)
 		} else {
 			// TODO: use https://github.com/lgarron/printable-shell-command once we port this.
 			fmt.Printf("Running command: %#v\n", op.CommandToRunBefore)
