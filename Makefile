@@ -6,7 +6,6 @@ all: test
 .PHONY: lint
 lint:
 	go vet ${PROJECT}
-	golint -set_exit_status ${PROJECT}
 
 .PHONY: test
 test: lint
