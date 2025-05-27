@@ -21,7 +21,9 @@ type Operation struct {
 	SDCardMountPoint string          `json:"sd_card_mount_point"`
 	SDCardNames      []string        `json:"sd_card_names"`
 	FolderMapping    []folderMapping `json:"folder_mapping"`
-	Options          commandLineOptions
+	// TODO: the following should be a tuple, but Go is inadequate for that.
+	CommandToRunBefore []string `json:"command_to_run_before"` // Contains a command and arguments as entries.
+	Options            commandLineOptions
 }
 
 func (fm folderMapping) validate() error {

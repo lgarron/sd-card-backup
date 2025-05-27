@@ -3,7 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
+	"os/exec"
 
 	backup "github.com/lgarron/sd-card-backup"
 )
@@ -21,6 +23,21 @@ func main() {
 	}
 
 	op.Options.DryRun = *dryRun
+
+	if len(op.CommandToRunBefore) > 0 {
+		if op.Options.DryRun {
+			fmt.Printf("Skipping command due to dry run: %#v\n", op.CommandToRunBefore)
+		} else {
+			// TODO: use https://github.com/lgarron/printable-shell-command once we port this.
+			fmt.Printf("Running command: %#v\n", op.CommandToRunBefore)
+			cmd := exec.Command(op.CommandToRunBefore[0], op.CommandToRunBefore[1:]...)
+			cmd.Stdout = os.Stdout
+			cmd.Stderr = os.Stderr
+			if err := cmd.Run(); err != nil {
+				log.Fatal(err)
+			}
+		}
+	}
 
 	err = op.BackupAllCards()
 	if err != nil {
