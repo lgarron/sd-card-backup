@@ -44,4 +44,6 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error backing up: %s\n", err)
 		os.Exit(1)
 	}
+
+	fmt.Println("Done with `sd-card-backup`!")
 }
