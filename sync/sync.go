@@ -80,7 +80,7 @@ func RevealablePath(path string, revealPathOSC8 bool) string {
 	}
 
 	url := url.URL{
-		Scheme: "reveal-file",
+		Scheme: "reveal-path",
 		Path:   path,
 	}
 	return fmt.Sprintf("\x1b]8;;%s\x1b\\%s\x1b]8;;\x1b\\", url.String(), path)
