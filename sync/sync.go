@@ -3,6 +3,7 @@ package sync
 import (
 	"errors"
 	"fmt"
+	"net/url"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -17,9 +18,13 @@ import (
 const SECONDS_IN_AN_HOUR = 60 * 60
 const BYTES_IN_MEGABYTE = 1000 * 1000
 
+type QueueOptions struct {
+	RevealPathOSC8 bool
+}
+
 // Syncer represents a way to sync a list of files.
 type Syncer interface {
-	Queue(src string, dest string) error
+	Queue(src string, dest string, queueOptions QueueOptions) error
 	// Flushes any queued operations that are not completed, before returning.
 	// Flush() error
 }
@@ -68,7 +73,20 @@ func NewMacOSNativeCpUsingFilesizeAndBirthTime() MacOSNativeCpUsingFilesizeAndBi
 
 var alreadyBackedUpMessageShown = false
 
-func (s MacOSNativeCpUsingFilesizeAndBirthTime) Queue(src string, dest string) error {
+// TODO: better argument handling.
+func RevealablePath(path string, revealPathOSC8 bool) string {
+	if !revealPathOSC8 {
+		return path
+	}
+
+	url := url.URL{
+		Scheme: "reveal-file",
+		Path:   path,
+	}
+	return fmt.Sprintf("\x1b]8;;%s\x1b\\%s\x1b]8;;\x1b\\", url.String(), path)
+}
+
+func (s MacOSNativeCpUsingFilesizeAndBirthTime) Queue(src string, dest string, queueOptions QueueOptions) error {
 	same, srcStat, err := s.fileIsSameHeuristic(src, dest)
 	if err != nil {
 		return err
@@ -84,7 +102,7 @@ func (s MacOSNativeCpUsingFilesizeAndBirthTime) Queue(src string, dest string) e
 		return nil
 	}
 
-	fmt.Printf("\n↪ %s (%d MB)", dest, srcStat.Size/BYTES_IN_MEGABYTE)
+	fmt.Printf("\n↪ %s (%d MB)", RevealablePath(dest, queueOptions.RevealPathOSC8), srcStat.Size/BYTES_IN_MEGABYTE)
 
 	os.MkdirAll(filepath.Dir(dest), 0700)
 

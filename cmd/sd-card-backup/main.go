@@ -11,6 +11,7 @@ import (
 )
 
 var dryRun = flag.Bool("dry-run", false, "Print what would happen, but don't modify the filesystem.")
+var revealPathOSC8 = flag.Bool("reveal-path-URLs", false, "Print `reveal-path://` URLs using OSC 8 hyperlinks.")
 
 func main() {
 	// Try to parse flags before doing anything.
@@ -23,6 +24,7 @@ func main() {
 	}
 
 	op.Options.DryRun = *dryRun
+	op.Options.RevealPathOSC8 = *revealPathOSC8
 
 	if len(op.CommandToRunBefore) > 0 {
 		if op.Options.DryRun {

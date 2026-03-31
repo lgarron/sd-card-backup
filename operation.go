@@ -10,8 +10,9 @@ type folderMapping struct {
 	Destination string `json:"destination"`
 }
 
-type commandLineOptions struct {
-	DryRun bool
+type CommandLineOptions struct {
+	DryRun         bool
+	RevealPathOSC8 bool
 }
 
 // Operation defines the config file format for the `sd-card-backup`
@@ -23,7 +24,7 @@ type Operation struct {
 	FolderMapping    []folderMapping `json:"folder_mapping"`
 	// TODO: the following should be a tuple, but Go is inadequate for that.
 	CommandToRunBefore []string `json:"command_to_run_before"` // Contains a command and arguments as entries.
-	Options            commandLineOptions
+	Options            CommandLineOptions
 }
 
 func (fm folderMapping) validate() error {
