@@ -84,12 +84,12 @@ func (fo folderOperation) targetPath(path string, f os.FileInfo) (string, error)
 }
 
 func (fo folderOperation) syncFile(src string, dest string) error {
-	fmt.Printf("%s", sync.RevealablePath(src, fo.Operation.Options.RevealPathOSC8))
-	if fo.Operation.Options.DryRun {
+	fmt.Printf("%s", sync.RevealablePath(src, fo.Operation.CommandlineOptions.RevealPathOSC8))
+	if fo.Operation.CommandlineOptions.DryRun {
 		fmt.Println()
 	} else {
 		queueOptions := sync.QueueOptions{
-			RevealPathOSC8: fo.Operation.Options.RevealPathOSC8,
+			RevealPathOSC8: fo.Operation.CommandlineOptions.RevealPathOSC8,
 		}
 		err := fo.Syncer.Queue(src, dest, queueOptions)
 		if err != nil {

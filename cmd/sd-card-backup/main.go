@@ -23,11 +23,11 @@ func main() {
 		os.Exit(1)
 	}
 
-	op.Options.DryRun = *dryRun
-	op.Options.RevealPathOSC8 = *revealPathOSC8
+	op.CommandlineOptions.DryRun = *dryRun
+	op.CommandlineOptions.RevealPathOSC8 = *revealPathOSC8
 
 	if len(op.CommandToRunBefore) > 0 {
-		if op.Options.DryRun {
+		if op.CommandlineOptions.DryRun {
 			fmt.Printf("Skipping the following `command_to_run_before` due to dry run: %#v\n", op.CommandToRunBefore)
 		} else {
 			// TODO: use https://github.com/lgarron/printable-shell-command once we port this.
