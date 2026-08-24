@@ -18,9 +18,9 @@ var dryRun = flag.Bool("dry-run", false, "Print what would happen, but don't mod
 // the [`UnquoteUsage`](https://pkg.go.dev/flag#UnquoteUsage) would extract a
 // usage string for a flag that… doesn't accept a usage string.
 //
-// I refuse to remove the backticks, but I have yet to find a way to escape them
-// properly. 🤷
-var revealPathOSC8 = flag.Bool("reveal-path-URLs", false, "Print `reveal-path://` URLs using OSC 8 hyperlinks.")
+// Using three backticks for the first instance seems to produce the intended
+// output. 🤷
+var revealPathOSC8 = flag.Bool("reveal-path-URLs", false, "Print ```reveal-path://` URLs using OSC 8 hyperlinks.")
 
 func main() {
 	// Try to parse flags before doing anything.
