@@ -28,14 +28,16 @@ func main() {
 	flag.Parse()
 
 	op, err := backup.OperationFromConfig()
-	if err != nil {
+	if err == nil {
+		fmt.Println("Using config from file. Any commandline flag will be set to true if it is true in the config or provided on the commandline itself (logical or).")
+	} else {
 		fmt.Fprintf(os.Stderr, "Could not read config file: %s\n", err)
 		os.Exit(1)
 	}
 
-	op.CommandlineOptions.DryRun = *dryRun
-	op.CommandlineOptions.SkipVideos = *skipVideos
-	op.CommandlineOptions.RevealPathOSC8 = *revealPathOSC8
+	op.CommandlineOptions.DryRun = op.CommandlineOptions.DryRun || *dryRun
+	op.CommandlineOptions.SkipVideos = op.CommandlineOptions.SkipVideos || *skipVideos
+	op.CommandlineOptions.RevealPathOSC8 = op.CommandlineOptions.RevealPathOSC8 || *revealPathOSC8
 
 	if len(op.CommandToRunBefore) > 0 {
 		if op.CommandlineOptions.DryRun {
