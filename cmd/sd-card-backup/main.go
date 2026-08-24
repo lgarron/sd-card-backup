@@ -11,6 +11,7 @@ import (
 )
 
 var dryRun = flag.Bool("dry-run", false, "Print what would happen, but don't modify the filesystem.")
+var skipVideos = flag.Bool("skip-videos", false, "Skip videos.")
 
 // TODO: Go has absolute bonkers behaviour and prints `reveal-path://` as an
 // example argument for a binary flag because it's in backticks. This behaviour
@@ -33,6 +34,7 @@ func main() {
 	}
 
 	op.CommandlineOptions.DryRun = *dryRun
+	op.CommandlineOptions.SkipVideos = *skipVideos
 	op.CommandlineOptions.RevealPathOSC8 = *revealPathOSC8
 
 	if len(op.CommandToRunBefore) > 0 {

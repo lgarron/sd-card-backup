@@ -12,6 +12,7 @@ type folderMapping struct {
 
 type CommandlineOptions struct {
 	DryRun         bool
+	SkipVideos     bool `json:"skip_videos"`
 	RevealPathOSC8 bool `json:"reveal_path_urls"`
 }
 

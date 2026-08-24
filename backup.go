@@ -173,6 +173,16 @@ func (op Operation) BackupCard(cardName string) error {
 	fmt.Printf("[%s] Backing up card\n", cardName)
 
 	for _, fc := range classificationBackupOrder {
+		if op.CommandlineOptions.SkipVideos {
+			if fc == videoFile {
+				println("⏩ Skipping video files due to commandline flag.")
+				continue
+			}
+			if fc == rawVideoFile {
+				println("⏩ Skipping raw video files due to commandline flag.")
+				continue
+			}
+		}
 		for _, fm := range op.FolderMapping {
 
 			folderSourceRoot := filepath.Join(op.SDCardMountPoint, cardName, fm.Source)
